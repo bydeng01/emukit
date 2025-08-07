@@ -1,0 +1,18 @@
+# Requirements for multi-fidelity deep GP examples
+# WARNING: These legacy dependencies are no longer available in current repositories
+# The doubly_stochastic_dgp package requires very old versions of TensorFlow and GPflow
+# that are incompatible with modern Python environments.
+
+# Legacy versions that are NO LONGER AVAILABLE:
+# tensorflow==1.8.0  # Not available in current PyPI
+# gpflow==1.1.1      # Not available in current PyPI
+
+# The doubly_stochastic_dgp package is not compatible with modern TensorFlow/GPflow
+# git+https://github.com/UCL-SML/Doubly-Stochastic-DGP.git
+
+# Note: The multi-fidelity deep GP examples in this directory are currently 
+# non-functional due to dependency incompatibilities. Users interested in 
+# multi-fidelity deep GPs should consider using modern alternatives such as:
+# - GPflow 2.x with custom implementations
+# - GPyTorch for deep GPs
+# - Modern variational inference frameworks

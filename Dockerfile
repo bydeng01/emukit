@@ -32,6 +32,11 @@ FROM base as production
 # Install only production dependencies
 RUN pip install --no-cache-dir -r requirements/requirements.txt
 
+# Note: Multi-fidelity deep GP examples require legacy dependencies that are
+# no longer available in current repositories (tensorflow 1.8, gpflow 1.1.1).
+# These examples are currently non-functional. See requirements/multi_fidelity_dgp_requirements.txt
+# for more information and modern alternatives.
+
 # Copy the entire application
 COPY . .
 
@@ -54,6 +59,11 @@ RUN pip install --no-cache-dir \
     -r requirements/requirements.txt \
     -r requirements/test_requirements.txt \
     -r requirements/integration_test_requirements.txt
+
+# Note: Multi-fidelity deep GP examples require legacy dependencies that are
+# no longer available in current repositories (tensorflow 1.8, gpflow 1.1.1).
+# These examples are currently non-functional. See requirements/multi_fidelity_dgp_requirements.txt
+# for more information and modern alternatives.
 
 # Install additional development tools
 RUN pip install --no-cache-dir \
@@ -100,6 +110,11 @@ FROM base as docs
 RUN pip install --no-cache-dir \
     -r requirements/requirements.txt \
     -r requirements/doc_requirements.txt
+
+# Note: Multi-fidelity deep GP examples require legacy dependencies that are
+# no longer available in current repositories (tensorflow 1.8, gpflow 1.1.1).
+# These examples are currently non-functional. See requirements/multi_fidelity_dgp_requirements.txt
+# for more information and modern alternatives.
 
 # Copy the entire application
 COPY . .
