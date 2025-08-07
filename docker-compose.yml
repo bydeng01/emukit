@@ -1,0 +1,140 @@
+# Docker Compose for Emukit Development Environment
+# Copyright 2020-2024 The Emukit Authors. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+version: '3.8'
+
+services:
+  # Production service
+  emukit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: emukit:production
+    container_name: emukit-prod
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data:ro
+    environment:
+      - PYTHONPATH=/app
+    command: python -c "import emukit; print('Emukit production environment ready!')"
+
+  # Development service with JupyterLab
+  emukit-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    image: emukit:development
+    container_name: emukit-dev
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/app
+      - ./data:/app/data
+      - jupyter-data:/home/emukit/.jupyter
+    environment:
+      - PYTHONPATH=/app
+      - JUPYTER_ENABLE_LAB=yes
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
+
+  # Testing service
+  emukit-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+    image: emukit:testing
+    container_name: emukit-test
+    volumes:
+      - .:/app
+      - test-results:/app/htmlcov
+    environment:
+      - PYTHONPATH=/app
+    command: pytest tests/ -v --cov=emukit --cov-report=html --cov-report=term
+
+  # Integration testing service
+  emukit-integration-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+    image: emukit:testing
+    container_name: emukit-integration-test
+    volumes:
+      - .:/app
+      - test-results:/app/htmlcov
+    environment:
+      - PYTHONPATH=/app
+    command: pytest integration_tests/ -v --cov=emukit --cov-report=html --cov-report=term
+
+  # Documentation service
+  emukit-docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: docs
+    image: emukit:docs
+    container_name: emukit-docs
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./doc:/app/doc
+      - docs-build:/app/doc/_build
+    environment:
+      - PYTHONPATH=/app
+    command: >
+      sh -c "cd doc && 
+             make html && 
+             python -m http.server 8000 --directory _build/html"
+
+  # Jupyter Notebook service (alternative to JupyterLab)
+  emukit-notebook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: notebook
+    image: emukit:notebook
+    container_name: emukit-notebook
+    ports:
+      - "8889:8888"
+    volumes:
+      - ./notebooks:/app/notebooks
+      - .:/app
+      - notebook-data:/home/emukit/.jupyter
+    environment:
+      - PYTHONPATH=/app
+    command: jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
+
+  # Shell service for interactive development
+  emukit-shell:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    image: emukit:development
+    container_name: emukit-shell
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    environment:
+      - PYTHONPATH=/app
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+volumes:
+  jupyter-data:
+    driver: local
+  notebook-data:
+    driver: local
+  test-results:
+    driver: local
+  docs-build:
+    driver: local
+
+networks:
+  default:
+    name: emukit-network
