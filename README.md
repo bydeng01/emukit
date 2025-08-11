@@ -23,9 +23,15 @@ Emukit is agnostic to the underlying modelling framework, which means you can us
 
 ## Installation
 
-To install emukit, simply run
+To install emukit, run
 ```
 pip install emukit
+```
+or
+```
+conda create -n emukit python=3.11 -y
+conda activate emukit && pip install -e .
+conda activate emukit && python -c "import emukit; print(f'Emukit version: {emukit.__version__}'); print('Emukit successfully installed!')"
 ```
 
 For other install options, see our [documentation](https://emukit.readthedocs.io/en/latest/installation.html).
