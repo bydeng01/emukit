@@ -14,7 +14,7 @@ The class intended for public consumption is MultiFidelityDeepGP, which is an em
 This file requires the following packages:
 - tensorflow 1.x
 - gpflow 1.x
-- doubly_stochastic_dgp https://github.com/ICL-SML/Doubly-Stochastic-DGP/tree/master/doubly_stochastic_dgp
+- doubly_stochastic_dgp https://github.com/UCL-SML/Doubly-Stochastic-DGP/tree/master/doubly_stochastic_dgp
 """
 import logging
 from typing import List, Tuple
@@ -46,7 +46,7 @@ try:
 except ImportError:
     raise ImportError(
         "doubly_stochastic_dgp is not installed. "
-        "Please run pip install git+https://github.com/ICL-SML/Doubly-Stochastic-DGP.git"
+        "Please run pip install git+https://github.com/UCL-SML/Doubly-Stochastic-DGP.git"
     )
 
 try:
